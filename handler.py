@@ -25,7 +25,7 @@ def get_item_news(html_code):
 
         html = get_html_item_news(html_code)
 
-        header = html.h1
+        header = html.h1.text
 
         words = ''
 
