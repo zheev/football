@@ -35,11 +35,15 @@ def get_item_news(html_code):
             if t.find_parent('a'):
                 t.extract()
             else:
-                words = words + '\t'+t.get_text()+'\n'
+                text_clean = clean_text(t.get_text())
+                words = words + '\t'+text_clean+'\n'
 
         send_message(words, header)
 
-
+def clean_text(text):
+    text = text.replace("«", '')
+    text = text.replace("»", '')
+    return text
 
 def test_html(html):
     f = open('test.html', 'w')
