@@ -6,5 +6,5 @@ def getUrl(TOKEN, type):
 
 def send_message(text, header):
     url = getUrl(TOKEN_APP, 'sendMessage')
-    requests.post(url, data={'chat_id': '@zheevfootball', 'text': '\t\t **{}** \n{}'.format(header,text),
+    requests.post(url, data={'chat_id': '@zheevfootball', 'text': '*{}*\n{}'.format(header,text),
                              'parse_mode': 'Markdown'})
