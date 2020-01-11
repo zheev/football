@@ -35,7 +35,7 @@ def get_item_news(html_code):
             if t.find_parent('a'):
                 t.extract()
             else:
-                words = words + t.get_text()
+                words = words + '\t'+t.get_text()+'\n'
 
         send_message(words, header)
 
