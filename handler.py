@@ -31,7 +31,7 @@ def get_item_news(html_code):
 
         html = get_html_item_news(html_code)
 
-        if html is not None:
+        if html is None:
             return False
 
         header = html.h1.text
