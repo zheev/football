@@ -64,7 +64,7 @@ def test_html(html):
 
 #Функция для фильтрации данных
 def is_good_news(text):
-    text = text.lower(text)
+    text = text.lower()
     stop_word = ['жена', 'жену', 'развод', 'уткин', 'путин']
     if len(list(filter(lambda x: x in text, stop_word))) > 0:
         return False
