@@ -18,12 +18,13 @@ def get_html(html, one = False, tag = '', selector={}):
 def get_html_item_news(html):
     if len(html['href']):
         url = 'https://sport24.ru{}'.format(html['href'])
-        db.add_url(html['href'])
-        r = requests.get(url)
-        r.encoding = 'utf-8'
-        html = get_html(r.text, True)
+        if not db.check_url(html['href']):
+            db.add_url(html['href'])
+            r = requests.get(url)
+            r.encoding = 'utf-8'
+            html = get_html(r.text, True)
 
-        return  html
+            return  html
 
 #
 def get_item_news(html_code):

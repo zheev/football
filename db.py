@@ -15,30 +15,49 @@ def create_table(conn):
         """
             create table if not exists walls 
             (
-                id int primary key,
-                url text not null
+                id integer primary key,
+                url text not null,
+                unique(url, id)
             )
         """
     )
+    cursor.execute(
+        """ 
+        CREATE UNIQUE INDEX IF NOT EXISTS unique_name ON walls(url);
+        """
+    )
 
+def clear_url(url):
+    url = url.strip('/')
+    url = url.replace('/', '_')
+    url = url.replace('-', '_')
+    url = "\""+url+"\""
+    return url
 
 # добавляем урл в таблицу
 def add_url(url):
     conn = init_db()
     cursor = conn.cursor()
-    cursor.executemany(
-        """
-            insert into walls  
+    queryText =  """
+            insert or ignore into walls  
             (url)
             values
-            (?)
-        """, url
-    )
+            ({url})
+        """.format(url=clear_url(url))
+    cursor.execute(queryText)
     conn.commit()
 
 
-def get_last_url():
-    pass
-
-def check_url():
-    pass
+def check_url(url):
+    conn = init_db()
+    cursor = conn.cursor()
+    queryText = """
+               select url
+               from walls
+               where url={url}
+           """.format(url=clear_url(url))
+    cursor.execute(queryText)
+    if len(cursor.fetchall()) > 0:
+        return True
+    else:
+        return False
