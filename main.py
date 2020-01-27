@@ -12,4 +12,3 @@ if __name__ == '__main__':
     for item in news_list:
         if is_good_news(item.span.text):
             get_item_news(item)
-            break
