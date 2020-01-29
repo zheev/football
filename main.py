@@ -9,6 +9,8 @@ if __name__ == '__main__':
 
     news_list = get_html(r.text, False, 'a', {'class':"qNoPjs"})
 
+    news_list.reverse()
+
     for item in news_list:
         if is_good_news(item.span.text):
             get_item_news(item)
