@@ -18,7 +18,7 @@ def get_html(html, one = False, tag = '', selector={}):
 def get_html_item_news(html):
     if len(html['href']):
         url = 'https://sport24.ru{}'.format(html['href'])
-        if not db.check_url(html['href']):
+        if db.check_url(html['href']) is not True:
             db.add_url(html['href'])
             r = requests.get(url)
             r.encoding = 'utf-8'
