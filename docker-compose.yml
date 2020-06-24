@@ -1,0 +1,8 @@
+version: '3'
+services:
+        python:
+                volumes:
+                        - /home/zheev/www/football:/var/www
+                build: .
+                ports:
+                        - "8081:8081"

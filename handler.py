@@ -24,7 +24,7 @@ def get_html_item_news(html):
             r.encoding = 'utf-8'
             html = get_html(r.text, True)
 
-            return  html
+            return html
 
 #
 def get_item_news(html_code):
@@ -41,11 +41,15 @@ def get_item_news(html_code):
         text = html.find(class_='js-mediator-article _1YOxdQ').find_all('span')
 
         for t in text:
-            if t.find_parent('a'):
+            if t.find(class_='_3trnLJ'):
                 t.extract()
             else:
                 text_clean = clean_text(t.get_text())
                 words = words + '\t'+text_clean+'\n'
+
+        id = db.add_text(words, header, html_code['href'])
+
+        words = words + '[Читать](http://zheev.ru:8081/'+str(id)+')'
 
         send_message(words, header)
 
