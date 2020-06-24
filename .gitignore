@@ -4,3 +4,5 @@ test*
 __pycache__
 .idea
 football.db
+Dockerfile
+docker-compose.yml
