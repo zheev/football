@@ -1,44 +1,10 @@
-import sqlite3
-
-name_db = './football.db'
+import psycopg2
 
 # инициализируем бд
 def init_db():
-    conn = sqlite3.connect(name_db)
-    create_table(conn)
+    conn = psycopg2.connect(dbname='football', user='football',
+                            password='football', host='psql')
     return conn
-
-
-# если нет нужной таблицы, то создаём
-def create_table(conn):
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-            create table if not exists walls 
-            (
-                id integer primary key,
-                url text not null,
-                unique(url, id)
-            )
-        """
-    )
-    cursor.execute(
-        """
-            create table if not exists texts 
-            (
-                id integer primary key,
-                header text not null,
-                text text not null,
-                url text not null,
-                unique(id, url)
-            )
-        """
-    )
-    cursor.execute(
-        """ 
-        CREATE UNIQUE INDEX IF NOT EXISTS unique_name ON walls(url);
-        """
-    )
 
 
 def clear_url(url):
@@ -54,13 +20,14 @@ def add_url(url):
     conn = init_db()
     cursor = conn.cursor()
     queryText = """
-            insert or ignore into walls  
+            insert into walls  
             (url)
             values
-            ({url})
-        """.format(url=clear_url(url))
-    cursor.execute(queryText)
+            (%s) on conflict (url) do nothing
+        """
+    cursor.execute(queryText.strip(), [url])
     conn.commit()
+    conn.close()
 
 
 def check_url(url):
@@ -69,12 +36,14 @@ def check_url(url):
     queryText = """
                select url
                from walls
-               where url={url}
-           """.format(url=clear_url(url))
-    cursor.execute(queryText)
+               where url=%(url)s
+           """
+    cursor.execute(queryText.strip(), {"url":url})
     if len(cursor.fetchall()) > 0:
+        conn.close()
         return True
     else:
+        conn.close()
         return False
 
 
@@ -82,14 +51,15 @@ def add_text(text, header, url):
     conn = init_db()
     cursor = conn.cursor()
     queryText = """
-                   insert or ignore into texts  
+                   insert into texts  
                     (text, header, url)
                     values
-                    (?, ?, ?)
+                    (%(text)s, %(header)s, %(url)s)
                """
-    cursor.execute(queryText, [text, header, url])
+    cursor.execute(queryText, {"text":text, "header":header, "url":url})
     conn.commit()
     last_id = cursor.lastrowid
+    conn.close()
     return last_id
 
 
@@ -97,7 +67,7 @@ def get_text(id):
     conn = init_db()
     cursor = conn.cursor()
     queryText = """
-       select `text`, `header` from texts  where `id`=?
+       select text, header from texts where id=%s
        """
     cursor.execute(queryText, [id])
     return cursor.fetchone()
