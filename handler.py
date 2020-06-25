@@ -49,7 +49,7 @@ def get_item_news(html_code):
 
         id = db.add_text(words, header, html_code['href'])
 
-        words = words + '[Читать](https://t.me/iv?url=http%3A%2F%2Freadytospeak.ru%2Fhttp://zheev.ru/'+str(id)+'%2F&rhash=f3a254578f8d53)'
+        words = words + '[Читать](https://t.me/iv?url=http://zheev.ru/'+str(id)+'%2F&rhash=f3a254578f8d53)'
 
         send_message(words, header)
 
