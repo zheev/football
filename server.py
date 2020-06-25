@@ -5,7 +5,7 @@ import db
 class MainHandler(tornado.web.RequestHandler):
     def get(self, id):
         art = db.get_text(id)
-        self.set_header("Content-Type", "text/html")
+        self.set_header("Content-Type", "text/html; charset=utf-8")
         self.set_status(200)
         self.render("template.html", header=art[1], text=art[0])
 
