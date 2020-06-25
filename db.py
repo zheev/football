@@ -54,11 +54,11 @@ def add_text(text, header, url):
                    insert into texts  
                     (text, header, url)
                     values
-                    (%(text)s, %(header)s, %(url)s)
+                    (%(text)s, %(header)s, %(url)s) RETURNING id
                """
     cursor.execute(queryText, {"text":text, "header":header, "url":url})
     conn.commit()
-    last_id = cursor.lastrowid
+    last_id = cursor.fetchone()[0]
     conn.close()
     return last_id
 
